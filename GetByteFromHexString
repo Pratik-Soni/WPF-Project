@@ -1,0 +1,40 @@
+        private byte[] GetByteFromHexString(string command)
+        {
+            //Get raw Hex string and process that to get the command in bytes
+            byte[] byteCommand = new byte[24];
+            int count = 0;
+            byte svn = 0x07;
+
+            // Get first two characters.
+            for (int i = 0; i <= command.Length - 2; i += 2)
+            {
+                if (count % 8 == 0)
+                {
+                    byteCommand[count] = svn;
+                    count += 1;
+                }
+                string sub = command.Substring(i, 2);
+                int firstCh, secondCh, finalValue;
+                firstCh = GetRequireValue(sub[0]);
+                secondCh = GetRequireValue(sub[1]);
+                finalValue = firstCh << 4 | secondCh;
+                byteCommand[count] = (byte)finalValue;
+                count += 1;
+            }
+            return byteCommand;
+        }
+
+        public int GetRequireValue(char ch)
+        {
+            int x;
+            if (ch > '9')
+            {
+
+                x = ch - '0' - 7;
+            }
+            else
+            {
+                x = ch - '0';
+            }
+            return x;
+        }
